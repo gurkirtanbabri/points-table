@@ -66,7 +66,6 @@ async function main() {
         }
 
         preRate = rate
-        
 
         const {
           firstTeamPosition,
@@ -102,6 +101,8 @@ async function main() {
     let minBalls = null
     let miniRunRate = null
     let maxRunRate = null
+    let rate = null
+    let preRate = null
 
     while(totalBalls >= 0) {
       
@@ -119,12 +120,14 @@ async function main() {
         againstOvers: getRealOverVal(secondTeam.against.overs) + ( totalBalls / 6 )
       }
 
+      preRate = rate
+
       const {
         firstTeamPosition,
         firstTeamNrr
       } = getTeamPosition(filteredTable, team1, team2, firstTeam, secondTeam)
 
-      let preRate = firstTeamNrr
+       rate = firstTeamNrr
 
       if (maxBalls === null && firstTeamPosition === position) {
         maxRunRate = firstTeamNrr
@@ -133,7 +136,7 @@ async function main() {
 
 
       if (minBalls === null && firstTeamPosition < position) {
-        miniRunRate = firstTeamNrr
+        miniRunRate = rate
         minBalls = totalBalls - 1
         break;
       }

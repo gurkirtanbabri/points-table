@@ -220,8 +220,6 @@ export function getRealOverVal(overString) {
       {...secondTeam, nrr: secondTeamNrr, points: secondTeam.points, }
     ])  
 
-    console.table(table)
-
     const {
       firstTeamPosition,
       secondTeamPosition
