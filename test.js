@@ -4,7 +4,8 @@ import {
   Toss,
   getRealOverVal,
   getTeamPosition,
-  ballsToOvers
+  ballsToOvers,
+  convertOverToBalls
 } from './utils.js'
 
 
@@ -29,7 +30,7 @@ async function main() {
     tossResult,
     runScored,
     totalOvers
-  } = await getUserInput(state, pointsTable.length)
+  } =  await getUserInput(state, pointsTable.length)
 
   const filteredTable = pointsTable.filter((team) => ![firstTeam.teamName, secondTeam.teamName].includes(team.teamName))
 
@@ -106,18 +107,24 @@ async function main() {
 
     while(totalBalls >= 0) {
       
+      let team1ForBalls = convertOverToBalls(firstTeam.for.overs) + totalBalls
+      let firsTeamForOvers = getRealOverVal(ballsToOvers(team1ForBalls))
+
       let team1 = {
         forRuns: firstTeam.for.runs + runScored + 1,
-        forOvers: getRealOverVal(firstTeam.for.overs) + (totalBalls / 6),
+        forOvers: firsTeamForOvers,
         againstRuns: firstTeam.against.runs + runScored, 
         againstOvers: getRealOverVal(firstTeam.against.overs) + totalOvers
       }
+
+      let team2AgainstBalls = convertOverToBalls(secondTeam.against.overs) + totalBalls
+      let team2AgainstOvers = getRealOverVal(ballsToOvers(team2AgainstBalls))
 
       let team2 = {
         forRuns: secondTeam.for.runs + runScored,
         forOvers: getRealOverVal(secondTeam.for.overs) + totalOvers,
         againstRuns: secondTeam.against.runs + runScored + 1,
-        againstOvers: getRealOverVal(secondTeam.against.overs) + ( totalBalls / 6 )
+        againstOvers: team2AgainstOvers
       }
 
       preRate = rate
@@ -134,10 +141,9 @@ async function main() {
         maxBalls = totalBalls 
       }
 
-
       if (minBalls === null && firstTeamPosition < position) {
-        miniRunRate = rate
-        minBalls = totalBalls - 1
+        miniRunRate = preRate
+        minBalls = totalBalls + 1
         break;
       }
 
@@ -146,7 +152,7 @@ async function main() {
 
     console.log(`
     ${firstTeam.teamName} needs to chase ${runScored} between ${ballsToOvers(minBalls)} and ${ballsToOvers(maxBalls)} Overs.
-    Revised NRR for X_team_name will be between ${miniRunRate} to ${maxRunRate}`)
+    Revised NRR for ${firstTeam.teamName} will be between ${miniRunRate} to ${maxRunRate}`)
 
   }
 }

@@ -108,7 +108,7 @@ export function question(theQuestion) {
   
 export function getRealOverVal(overString) {
 
-  let overs = overString.split('.')
+  let overs = String(overString).split('.')
   return parseInt(overs[0]) + (overs[1] ? parseInt(overs[1]) / 6  : 0)
 }
 4
@@ -260,7 +260,7 @@ export function getRealOverVal(overString) {
 
 export function ballsToOvers(balls) {
   if ((balls % 6) === 0) {
-    return balls / 6
+    return String(balls / 6)
   }
 
   let i = 0
@@ -270,4 +270,15 @@ export function ballsToOvers(balls) {
   }
 
   return `${parseInt(balls / 6)}.${6 - i}`
+}
+
+export function convertOverToBalls(overs) {
+  let ballArray = overs.split('.')
+  let balls = parseInt(ballArray[0]) * 6
+
+  if (ballArray[1]) {
+      return balls + parseInt(ballArray[1])
+  }
+
+  return balls
 }
