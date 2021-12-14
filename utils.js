@@ -111,7 +111,7 @@ export function getRealOverVal(overString) {
   let overs = String(overString).split('.')
   return parseInt(overs[0]) + (overs[1] ? parseInt(overs[1]) / 6  : 0)
 }
-4
+
  export const pointsTable = [
     {
       teamName: 'Chennai Super Kings',
